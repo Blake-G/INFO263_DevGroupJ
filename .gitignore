@@ -1,0 +1,9 @@
+# Windows Explorer cache files
+
+*.ini
+*.db
+$RECYCLE.BIN/
+
+# macOS cache files
+
+.DS_Store
