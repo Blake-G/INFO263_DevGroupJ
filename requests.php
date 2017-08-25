@@ -84,7 +84,7 @@ class ParallelGet
             $this->ch[$i] = curl_init($url);
             curl_setopt($this->ch[$i], CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($this->ch[$i], CURLOPT_HTTPHEADER, $request_headers);
-            curl_setopt($this->ch[$i], CURLOPT_CAINFO, getcwd() . '\certs\ca-bundle.crt');
+            curl_setopt($this->ch[$i], CURLOPT_CAINFO, getcwd() . '/certs/ca-bundle.crt');
             curl_setopt($this->ch[$i], CURLOPT_ENCODING , "gzip");
             curl_multi_add_handle($this->mh, $this->ch[$i]);
 
