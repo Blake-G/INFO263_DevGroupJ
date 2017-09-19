@@ -7,3 +7,5 @@ $RECYCLE.BIN/
 # macOS cache files
 
 .DS_Store
+
+/include/config.php
