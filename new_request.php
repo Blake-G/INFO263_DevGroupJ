@@ -5,22 +5,57 @@
 	$url = "https://api.at.govt.nz/v2/public/realtime/vehiclelocations";
 	$route = $_GET['route'];
 
+	#sanitize $route before query
+	$route = sanitize_string($route);
+
+	function sanitize_string($string) {
+		$string = htmlspecialchars($string);
+		$string = strip_tags($string);
+		return $string;
+	}
+
 	// ----------------- MYSQL QUERY PART -----------------------------
 	$conn = new mysqli($hostname, $username, $password, $database);
 	if ($conn->connect_error) die($conn->connect_error);
 
-	$query = "SELECT trip_id FROM trips WHERE route_id in (SELECT route_id FROM routes WHERE route_short_name = '$route')";
-	$queryResult = $conn->query($query);
-	if (!$queryResult) die ($conn->error);
-	$rows = $queryResult->num_rows;
-
-	$trip_ids = array();
-	for ($i = 0; $i < $rows; $i++) {
-		$queryResult->data_seek($i);
-		$row = $queryResult->fetch_array(MYSQLI_ASSOC);
-		$tripid = $row['trip_id'];
-		array_push($trip_ids, $tripid);
+	if (!($query = $conn->prepare("SELECT trip_id FROM trips WHERE route_id in 
+		(SELECT route_id FROM routes WHERE route_short_name = ?)"))) {
+		print "Prepare query statement failed: " . $conn->error;
 	}
+
+	if (!$query->bind_param("s", $route)) {
+		print "Binding parameters failed: " . $query->error;
+	}
+
+	if (!$query->execute()) {
+		print "Execute failed: " . $query->error;
+	}
+
+	// $queryResult;
+	$query->bind_result($singleQueryResult);
+
+	$queryResult = array();
+	while ($query->fetch()) {
+		$queryResult[] = $singleQueryResult;
+	}
+
+	// echo $query . "\n";
+	// var_dump($queryResult);
+
+	// $query = "SELECT trip_id FROM trips WHERE route_id in (SELECT route_id FROM routes WHERE route_short_name = '$route')";
+	// $queryResult = $conn->query($query);
+	// if (!$queryResult) die ($conn->error);
+
+	$trip_ids = $queryResult;
+
+	// $rows = $queryResult->num_rows;
+	// $trip_ids = array();
+	// for ($i = 0; $i < $rows; $i++) {
+	// 	$queryResult->data_seek($i);
+	// 	$row = $queryResult->fetch_array(MYSQLI_ASSOC);
+	// 	$tripid = $row['trip_id'];
+	// 	array_push($trip_ids, $tripid);
+	// }
 	// print_r($trip_ids);
 	// ----------------------------------------------------------------
 
