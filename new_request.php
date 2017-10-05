@@ -36,7 +36,7 @@
 
 	$trip_ids = array();
 	while ($query->fetch()) {
-		$queryResult[] = $singleQueryResult;
+		$trip_ids[] = $singleQueryResult;
 	}
 
 	// echo $query . "\n";
