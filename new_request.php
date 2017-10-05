@@ -34,7 +34,7 @@
 	// $queryResult;
 	$query->bind_result($singleQueryResult);
 
-	$queryResult = array();
+	$trip_ids = array();
 	while ($query->fetch()) {
 		$queryResult[] = $singleQueryResult;
 	}
@@ -45,8 +45,6 @@
 	// $query = "SELECT trip_id FROM trips WHERE route_id in (SELECT route_id FROM routes WHERE route_short_name = '$route')";
 	// $queryResult = $conn->query($query);
 	// if (!$queryResult) die ($conn->error);
-
-	$trip_ids = $queryResult;
 
 	// $rows = $queryResult->num_rows;
 	// $trip_ids = array();
