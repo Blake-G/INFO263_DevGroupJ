@@ -21,10 +21,11 @@ function initMap() {
 }
 
 // Adds marker to the map and push to the array of markers
-function addMarker(location) {
+function addMarker(location, title) {
 	var marker = new google.maps.Marker({
 		position: location,
-		map: map
+		map: map,
+		title: title
 	});
 	markers.push(marker);
 }
@@ -96,7 +97,9 @@ function updateMap(route_code, isAuto) {
 				pos = response['response']['entity'][i]['vehicle']['position'];
 				myLat = pos['latitude'];
 				myLng = pos['longitude'];
-				addMarker({lat: myLat, lng: myLng});
+				vehicleId = response['response']['entity'][i]['vehicle']['vehicle']['id'];
+				title = "Vehicle ID: [" + vehicleId + "]";
+				addMarker({lat: myLat, lng: myLng}, title);
 			}
 
 			// Adjust the map so all markers are visible on it
