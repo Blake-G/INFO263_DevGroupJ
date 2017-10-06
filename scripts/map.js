@@ -3,23 +3,12 @@ var markers = [];
 
 
 function initMap() {
-	// var uluru = {lat: -25.363, lng: 131.044};
 	var auck = {lat: -36.8485, lng: 174.7633};
-	var auck2 = {lat: -36.8495, lng: 174.7643};
 	map = new google.maps.Map(document.getElementById('map'), {
 	  zoom: 13,
 	  center: auck
 	});
-	// var marker = new google.maps.Marker({
-	//   position: auck,
-	//   map: map
-	// });
-	// new google.maps.Marker({
-	//   position: auck2,
-	//   map: map
-	// });
 }
-
 
 
 // Adds marker to the map and push to the array of markers
@@ -34,8 +23,6 @@ function addMarker(location, title, contentString) {
 	var infowindow = new google.maps.InfoWindow({
     	content: contentString
     });
-
-	
 
 	marker.addListener('click', function() {
         infowindow.open(map, marker);
@@ -111,7 +98,7 @@ function updateMap(route_code, isAuto) {
 				myLng = pos['longitude'];
 				vehicleId = response['response']['entity'][i]['vehicle']['vehicle']['id'];
 				title = "Vehicle ID: [" + vehicleId + "]";
-				vehicleInfo = response['response']['entity'][i]
+				vehicleInfo = response['response']['entity'][i];
 				contentString = getContentString(vehicleInfo);
 				addMarker({lat: myLat, lng: myLng}, title, contentString);
 			}
@@ -124,6 +111,7 @@ function updateMap(route_code, isAuto) {
 
 	});
 }
+
 
 function getContentString(vehicleInfo) {
 	id = vehicleInfo['id'];
