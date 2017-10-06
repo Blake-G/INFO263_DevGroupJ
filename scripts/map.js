@@ -20,14 +20,26 @@ function initMap() {
 	// });
 }
 
+
+
 // Adds marker to the map and push to the array of markers
-function addMarker(location, title) {
+function addMarker(location, title, contentString) {
 	var marker = new google.maps.Marker({
 		position: location,
 		map: map,
 		title: title
 	});
 	markers.push(marker);
+
+	var infowindow = new google.maps.InfoWindow({
+    	content: contentString
+    });
+
+	
+
+	marker.addListener('click', function() {
+        infowindow.open(map, marker);
+    });
 }
 
 
@@ -99,7 +111,9 @@ function updateMap(route_code, isAuto) {
 				myLng = pos['longitude'];
 				vehicleId = response['response']['entity'][i]['vehicle']['vehicle']['id'];
 				title = "Vehicle ID: [" + vehicleId + "]";
-				addMarker({lat: myLat, lng: myLng}, title);
+				vehicleInfo = response['response']['entity'][i]
+				contentString = getContentString(vehicleInfo);
+				addMarker({lat: myLat, lng: myLng}, title, contentString);
 			}
 
 			// Adjust the map so all markers are visible on it
@@ -109,4 +123,28 @@ function updateMap(route_code, isAuto) {
 		}
 
 	});
+}
+
+function getContentString(vehicleInfo) {
+	id = vehicleInfo['id'];
+	lat = vehicleInfo['vehicle']['position']['latitude'];
+	long = vehicleInfo['vehicle']['position']['longitude'];
+	routeId = vehicleInfo['vehicle']['trip']['route_id'];
+	startTime = vehicleInfo['vehicle']['trip']['start_time'];
+	tripId = vehicleInfo['vehicle']['trip']['trip_id'];
+	vehicleId = vehicleInfo['vehicle']['vehicle']['id'];
+	contentString = 
+	'<div id="content">' +
+	'<div id="bodyContent">' +
+	'<h4><b>Vehicle Information</b></h4><br>' +
+	'<p>' +
+	'Vehicle ID: ' + vehicleId + '<br>' +
+	'Start Time: ' + startTime + '<br>' +
+	'Location: (' + lat + ', ' + long + ')<br>' +
+	'Route ID: ' + routeId + '<br>' +
+	'Trip ID: ' + tripId + '<br>' +
+	'Entity ID: ' + id + '<br>' +
+	'</p></div></div>';
+
+	return contentString;
 }
