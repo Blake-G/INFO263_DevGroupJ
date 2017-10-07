@@ -73,8 +73,8 @@ function adjustMapBounds() {
 
 
 function updateMap(route_code, isAuto) {
-	// this used to be "new_reqeust.php", changed to my one for debugging
-	$.get("new_reqeust.php", "route="+route_code, function(response, status, xhr) {
+	// this used to be "new_request.php", changed to my one for debugging
+	$.get("new_request.php", "route="+route_code, function(response, status, xhr) {
 		
 		if (status == "error") {
 			alert("Error: " + xhr.status + ": " + xhr.statusText);
