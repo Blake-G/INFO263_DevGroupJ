@@ -14,112 +14,84 @@
 		return $string;
 	}
 
-	// ----------------- MYSQL QUERY PART -----------------------------
+	// ----------------- MYSQL QUERY PART ----------------------
 	$conn = new mysqli($hostname, $username, $password, $database);
 	if ($conn->connect_error) die($conn->connect_error);
 
+	// Prepare the query to be sent to the database
 	if (!($query = $conn->prepare("SELECT trip_id FROM trips WHERE route_id in 
 		(SELECT route_id FROM routes WHERE route_short_name = ?)"))) {
 		print "Prepare query statement failed: " . $conn->error;
 	}
 
+	// Insert the $route variable into the query where the '?' is,
+	// the "s" tells the function the variable is a string
 	if (!$query->bind_param("s", $route)) {
 		print "Binding parameters failed: " . $query->error;
 	}
 
+	// Send the query to the database
 	if (!$query->execute()) {
 		print "Execute failed: " . $query->error;
 	}
 
-	// $queryResult;
+	// Choose what variable to send the result to (only get one
+	// result at a time (as far as I know))
 	$query->bind_result($singleQueryResult);
 
+	// Get all the results back and put them into the trip_ids array
 	$trip_ids = array();
 	while ($query->fetch()) {
 		$trip_ids[] = $singleQueryResult;
 	}
 
-	// echo $query . "\n";
-	// var_dump($queryResult);
-
-	// $query = "SELECT trip_id FROM trips WHERE route_id in (SELECT route_id FROM routes WHERE route_short_name = '$route')";
-	// $queryResult = $conn->query($query);
-	// if (!$queryResult) die ($conn->error);
-
-	// $rows = $queryResult->num_rows;
-	// $trip_ids = array();
-	// for ($i = 0; $i < $rows; $i++) {
-	// 	$queryResult->data_seek($i);
-	// 	$row = $queryResult->fetch_array(MYSQLI_ASSOC);
-	// 	$tripid = $row['trip_id'];
-	// 	array_push($trip_ids, $tripid);
-	// }
-	// print_r($trip_ids);
-	// ----------------------------------------------------------------
-
-	// $params = array("tripid" => $trip_ids);
+	// ---------------------------------------------------------
 
 
 
-	// -------------------- API CALL PART 1 ---------------------------
+	// -------------------- API CALL ---------------------------
+	// Prepare the parameters for the API call...
+
+	// There is a limited about of variables you can send to the API
+	// in the URL, so sending the list of trip_ids from the query just
+	// before won't work.
+	// So we query the API for all vehicles current running and that
+	// sends back a big array stuff. Then we sort through it all and
+	// compare the reults of the API query with the results of the MYSQL
+	// query and that leaves us with all the current vehicles that are
+	// currently on the route from our given short_route_name (eg 550)
+
+	// There may be a better way to do this but I don't know at the mo.
+
 	$params = array();
 
 	$results = apiCall($APIKey, $url, $params);
 	header('Content-Type: application/json');
 
+	// Decode the response so we can process it
 	$decoded = json_decode($results[0]);
 
-	// print $decoded->status;
-	// print_r($decoded->response->entity[0]->vehicle->trip->trip_id);
+	// ---------------------------------------------------------
 
-	$final_trip_ids = array();
+	// ------------------- SORTING RESULTS ---------------------
 
+	// The final array of objects to "return" (we just echo it)
+	$vehicles = array(); 
+
+	// Cycle through the returned list of vehicles and match them with
+	// the ones found from the MYSQL query
+	// These matched results are the entities that have 
+	// the route_short_name (eg 550) that we want
 	for ($i = 0; $i < count($decoded->response->entity); $i++) {
-		// print_r($decoded->response->entity[$i]->vehicle->trip->trip_id);
 		$tempid = $decoded->response->entity[$i]->vehicle->trip->trip_id;
+		$entity = $decoded->response->entity[$i];
 		if (in_array($tempid, $trip_ids)) {
-			// echo "Found it at: $i" . "\n";
-			array_push($final_trip_ids, $tempid);
-			// break;
+			array_push($vehicles, $entity);
 		}
 	}
 
-	// print_r($final_trip_ids);
-// ----------------------------------------------------------------
+	echo json_encode($vehicles);
+	// ---------------------------------------------------------
 
-
-
-
-// -------------------- API CALL PART 2 ---------------------------
-// This call is unncecessary but I'm too tired to fix it right now
-
-
-	if (count($final_trip_ids) == 0) {
-		// There are no trips, so... return nothing
-		$result->response = null;
-		$final_results = json_encode($result);
-		print $final_results;
-
-		// $j = json_decode($final_results);
-		// print_r($j);
-	} else {
-		// There are valid trip_ids, so do another request for the
-		// trips that match the route
-		$final_params = array("tripid" => $final_trip_ids);
-		$final_results = apiCall($APIKey, $url, $final_params);
-		print $final_results[0];
-
-		// $j = json_decode($final_results[0]);
-		// print_r($j);
-	}
-
-
-
-// ----------------------------------------------------------------
-
-
-
-
-//page 318
 ?>
 

@@ -18,12 +18,12 @@ require_once 'include/header.php';
     	var updateTime = 30000; // 30000 ms = 30 seconds
     	var timerExists = false; // A check to make sure we only have one auto refreshing timer
     	var timer;
-    	
+
     	// Timer is only started after a selection is made and won't have more than one
     	function startAutoRefresh(time) {
     		if (!timerExists) {
     			console.log("Created timer");
-		    	setInterval(function() {
+		    	timer = setInterval(function() {
 		    		route_short_name = $('#dropdown').find(":selected").text();
 		    		updateMap(route_short_name, true);
 		    		console.log("Auto update");
@@ -43,7 +43,7 @@ require_once 'include/header.php';
     		console.log("Dropdown update");
 
     		stopAutoRefresh(timer);
-    		timer = startAutoRefresh(updateTime);
+    		startAutoRefresh(updateTime);
 
     	});
 
@@ -53,13 +53,20 @@ require_once 'include/header.php';
     		console.log("Click update");
 
     		stopAutoRefresh(timer);
-    		timer = startAutoRefresh(updateTime);
+    		startAutoRefresh(updateTime);
     	});
+
+        $('#stopRefresh').click(function() {
+            clearInterval(timer);
+            timerExists = false;
+            console.log("Stopped the auto refresh");
+        });
 
     });
 </script>
 
 <br><button id="button">Click Me</button><br>
+<button id="stopRefresh">Stop Auto Refresh</button><br>
 <div id="testdiv">
 
 </div>

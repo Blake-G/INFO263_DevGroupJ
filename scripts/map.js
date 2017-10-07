@@ -10,6 +10,11 @@ function initMap() {
 	});
 }
 
+function resetMap() {
+	var auck = {lat: -36.8485, lng: 174.7633};
+	map.setZoom(13);
+	map.setCenter(auck);
+}
 
 // Adds marker to the map and push to the array of markers
 function addMarker(location, title, contentString) {
@@ -68,51 +73,66 @@ function adjustMapBounds() {
 
 
 function updateMap(route_code, isAuto) {
-	$.get("new_request.php", "route="+route_code, function(response, status, xhr) {
+	// this used to be "new_reqeust.php", changed to my one for debugging
+	$.get("blake-test-request.php", "route="+route_code, function(response, status, xhr) {
 		
-		// Alert message if it worked or not, don't need after debugging finished
-		// if (status == "success") {
-		// 	alert("External content was loaded successfully!");
-		// }
 		if (status == "error") {
 			alert("Error: " + xhr.status + ": " + xhr.statusText);
-		}
+		} 
 
-		if (response['response'] == null) {
-			deleteMarkers();
-			console.log(response['response']); // double checked in console
-		} else {
+		else if (status == "success") {
 
-			// Delete the old markers before we get the new markers
-			deleteMarkers();
+			if (response['length'] == 0) {
+				// If there is no results, reset the map
+				deleteMarkers();
+				console.log(response);
+				resetMap();
+				// want to stop autorefresh here too
+			} 
 
-			console.log(response); // Console output for debugging / manually checking positions.
+			else if (response == null) {
+				// There is something pretty wrong, this shouldn't happen
+				console.log("There is something very wrong (" + response + ")");
+			} 
 
-			var resLen = response['response']['entity']['length'];
-			var pos, myLat, myLng;
+			else {
+				// Delete the old markers before we get the new markers
+				deleteMarkers();
 
-			// Place a new marker for each... bus?
-			for (var i = 0; i < resLen; i++) {
-				pos = response['response']['entity'][i]['vehicle']['position'];
-				myLat = pos['latitude'];
-				myLng = pos['longitude'];
-				vehicleId = response['response']['entity'][i]['vehicle']['vehicle']['id'];
-				title = "Vehicle ID: [" + vehicleId + "]";
-				vehicleInfo = response['response']['entity'][i];
-				contentString = getContentString(vehicleInfo);
-				addMarker({lat: myLat, lng: myLng}, title, contentString);
+				// Console output for debugging / manually checking positions.
+				console.log(response);
+
+				var resLen = response['length'];
+				var pos, myLat, myLng, vehicleId, title, contentString;
+
+				// Place a new marker for each... bus?
+				for (var i = 0; i < resLen; i++) {
+					pos = response[i]['vehicle']['position'];
+					myLat = pos['latitude'];
+					myLng = pos['longitude'];
+					vehicleId = response[i]['vehicle']['vehicle']['id'];
+					title = "Vehicle ID: [" + vehicleId + "]";
+					vehicleInfo = response[i];
+					contentString = getContentString(vehicleInfo);
+					addMarker({lat: myLat, lng: myLng}, title, contentString);
+				}
+
+				// Adjust the map so all markers are visible on it
+				if (!isAuto) {
+					adjustMapBounds();
+				}
 			}
-
-			// Adjust the map so all markers are visible on it
-			if (!isAuto) {
-				adjustMapBounds();
-			}
 		}
-
+		else {
+			// This shouldn't be possible to get here.
+		}
 	});
 }
 
 
+// Pull out all the parts of the vehicle information and assembles
+// them into a string for the info window
+// TODO: I'm sure more info can be added or made prettier.
 function getContentString(vehicleInfo) {
 	id = vehicleInfo['id'];
 	lat = vehicleInfo['vehicle']['position']['latitude'];
@@ -121,6 +141,7 @@ function getContentString(vehicleInfo) {
 	startTime = vehicleInfo['vehicle']['trip']['start_time'];
 	tripId = vehicleInfo['vehicle']['trip']['trip_id'];
 	vehicleId = vehicleInfo['vehicle']['vehicle']['id'];
+
 	contentString = 
 	'<div id="content">' +
 	'<div id="bodyContent">' +
