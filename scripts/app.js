@@ -61,11 +61,11 @@ class App {
 
         this.map = new Map('#map');
 
-        this.recentreButton = $('#recenter');
-        this.updateButton = $('#button');
-        this.refreshButton = $('#stopRefresh');
+        this.recentreButton = $('#centre-map');
+        this.updateButton = $('#update');
+        this.refreshButton = $('#refresh');
         this.infoMessages = $('#messages');
-        this.routeDropdown = $('#dropdown');
+        this.routeDropdown = $('#routes-dropdown');
 
         this.timer = null;
         this.shouldAutoUpdate = true;

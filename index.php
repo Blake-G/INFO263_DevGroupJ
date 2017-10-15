@@ -7,11 +7,11 @@
 <div id="controls">
     <h3>Bus Route:</h3>
 
-    <button id="stopRefresh" class="button">Start</button>
-    <button id="button" class="button btn-info">Update</button>
-    <button id="recenter" class="button btn-info">Centre Map</button>
+    <button id="refresh" class="button">Start</button>
+    <button id="update" class="button btn-info">Update</button>
+    <button id="centre-map" class="button btn-info">Centre Map</button>
 
-    <select id="dropdown">
+    <select id="routes-dropdown">
         <?php
             require_once 'all_routes.php';
             foreach (allRoutes() as $routeName) {
