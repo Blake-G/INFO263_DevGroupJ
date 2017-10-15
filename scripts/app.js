@@ -51,21 +51,6 @@ class App {
         this.map.update(this.routeName, () => this.updateInfoText());
     }
 
-    /**
-     * Updates routes to those stored the `window.routes` object, which is
-     * populated on page load
-     */
-    updateRoutes() {
-        for (let route of window.routes) {
-            this.routeDropdown.append(
-                $('<option>', {
-                    value: route,
-                    text: route
-                })
-            );
-        }
-    }
-
     constructor() {
 
         // Class constants
@@ -101,9 +86,7 @@ class App {
 
         // Peform initial processing
 
-        this.updateRoutes();
         this.updateMap();
-
         this.shouldAutoUpdate && this.resetTimer();
 
     }

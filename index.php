@@ -10,7 +10,14 @@ require_once 'include/header.php';
     <button id="stopRefresh" class="button">Start</button>
     <button id="button" class="button btn-info">Update</button>
     <button id="recenter" class="button btn-info">Center</button>
-    <select id="dropdown"></select>
+    <select id="dropdown">
+        <?php
+            require_once 'all_routes.php';
+            foreach (allRoutes() as $routeName) {
+                echo "<option value='$routeName'>$routeName</option>";
+            }
+        ?>
+    </select>
 </div>
 
 <div id="msg">
@@ -20,10 +27,6 @@ require_once 'include/header.php';
 
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6A5-qVznwBsQg3xMZu2hpAhTsVd7f2GI&callback=hasLoaded.maps.resolve">
-</script>
-
-<script>
-    window.routes = <?php require_once 'all_routes.php'; ?>;
 </script>
 
 <script src="scripts/main.js"></script>
