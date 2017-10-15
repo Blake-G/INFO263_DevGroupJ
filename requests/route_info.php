@@ -1,7 +1,7 @@
 <?php
 
-require_once 'include/config.php';
-require_once 'requests.php';
+require_once '../include/config.php';
+require_once '../requests.php';
 
 $url = "https://api.at.govt.nz/v2/public/realtime/vehiclelocations";
 $route = $_GET['route'];
@@ -22,18 +22,18 @@ if ($conn->connect_error) die($conn->connect_error);
 // Prepare the query to be sent to the database
 if (!($query = $conn->prepare("SELECT trip_id FROM trips WHERE route_id in
 	(SELECT route_id FROM routes WHERE route_short_name = ?)"))) {
-	print "Prepare query statement failed: " . $conn->error;
+	die("Prepare query statement failed: " . $conn->error);
 }
 
 // Insert the $route variable into the query where the '?' is,
 // the "s" tells the function the variable is a string
 if (!$query->bind_param("s", $route)) {
-	print "Binding parameters failed: " . $query->error;
+	die("Binding parameters failed: " . $query->error);
 }
 
 // Send the query to the database
 if (!$query->execute()) {
-	print "Execute failed: " . $query->error;
+    die("Execute failed: " . $query->error);
 }
 
 // Choose what variable to send the result to (only get one
