@@ -102,17 +102,15 @@ class Map {
      * Updates the map with information about vehicles on a specific route.
      * Calls `callback` upon successful completion.
      */
-    update(route, _, callback) {
+    update(route, callback) {
 
         // Show the loading animation
 
-        $('#loadAnim').toggleClass('hidden');
+        this.loadingIndicator.toggleClass('hidden');
 
         // Execute the request
 
         $.get(this.UPDATE_ENDPOINT, {route}, response => {
-
-            console.log('response is', response);
 
             this.visibleBusesCount = response.length;
 
@@ -151,7 +149,7 @@ class Map {
                 callback && callback();
 
                 // Hide the loading animation
-                $('#loadAnim').toggleClass('hidden')
+                this.loadingIndicator.toggleClass('hidden')
             }
         );
 
@@ -171,6 +169,7 @@ class Map {
 
         this.markers = [];
         this.visibleBusesCount = 0;
+        this.loadingIndicator = $('#loadAnim');
 
         this.mapElement = $(selector)[0];
         this.map = new google.maps.Map(this.mapElement, this.defaults);
