@@ -18,11 +18,9 @@
 	$conn = new mysqli($hostname, $username, $password, $database);
 	if ($conn->connect_error) die($conn->connect_error);
 
-	// Prepare the query to be sent to the database
-	if (!($query = $conn->prepare("SELECT trip_id FROM trips WHERE route_id in 
-		(SELECT route_id FROM routes WHERE route_short_name = ?)"))) {
-		print "Prepare query statement failed: " . $conn->error;
-	}
+// ----------------- MYSQL QUERY PART ----------------------
+$conn = new mysqli(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+if ($conn->connect_error) die($conn->connect_error);
 
 	// Insert the $route variable into the query where the '?' is,
 	// the "s" tells the function the variable is a string
