@@ -63,7 +63,7 @@ class Map {
             marker => bounds.extend(marker.getPosition())
         );
 
-        this.map.fitBounds(bounds);
+        this.markers.length && this.map.fitBounds(bounds);
         this.map.getZoom() > this.MAX_ZOOM && this.map.setZoom(this.MAX_ZOOM);
 
     }
@@ -108,8 +108,6 @@ class Map {
 
         $.get(this.UPDATE_ENDPOINT, {route}, response => {
 
-            console.log(response);
-
             this.visibleBusesCount = response.length;
 
             // Regardless of the response, we need to delete the old markers
@@ -120,6 +118,7 @@ class Map {
 
             if (response.length == 0 || !response) {
                 this.reset();
+                this.adjustBounds();
                 return;
             }
 
