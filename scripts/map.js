@@ -64,13 +64,17 @@ function deleteMarkers() {
 
 // Adjust the map to show all markers on the map
 function adjustMapBounds() {
-	var bounds = new google.maps.LatLngBounds();
-	for (var i = 0; i < markers.length; i++) {
-		bounds.extend(markers[i].getPosition());
-	}
-	map.fitBounds(bounds);
-	if(num == 1 || map.getZoom() > 17) {
-		map.setZoom(17);
+	if(num > 0) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markers.length; i++) {
+            bounds.extend(markers[i].getPosition());
+        }
+        map.fitBounds(bounds);
+        if (num == 1 || map.getZoom() > 17) {
+            map.setZoom(17);
+        }
+    } else {
+		resetMap()
 	}
 }
 

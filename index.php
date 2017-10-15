@@ -86,13 +86,17 @@ require_once 'include/header.php';
             }
         });
 
+        $('#recenter').click(function(){
+            adjustMapBounds();
+        });
+
         //Sets the timer to not refresh at the start
         stopAutoRefresh(timer);
 
 
     });
 </script>
-
+<br><button id="recenter">Center</button>
 <br><button id="button">Update</button><br>
 <button id="stopRefresh" class="btn-success">Start</button><br>
 <div id="testdiv">
