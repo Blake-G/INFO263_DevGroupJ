@@ -2,15 +2,28 @@
 $active = "home";
 require_once 'include/header.php';
 ?>
-<select id="dropdown">
-</select>
+
 <div id="map"></div>
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6A5-qVznwBsQg3xMZu2hpAhTsVd7f2GI&callback=initMap">
 </script>
 <script src="scripts/map.js"></script>
-<script src="scripts/add_routes_to_dropdown.js"></script>
+<div id="controls">
+    <h3 for="dropdown">Bus Route: </h3>
+    <button id="stopRefresh" class="button">Start</button>
+    <button id="button" class="button btn-info">Update</button>
+    <button id="recenter" class="button btn-info">Center</button>
+    <select id="dropdown"></select>
 
+
+</div>
+
+<div id="msg">
+    <h4>Messages: </h4>
+    <p id="messages"></p>
+</div>
+
+<script src="scripts/add_routes_to_dropdown.js"></script>
 <script>
     $(document).ready(function() {
 
@@ -25,7 +38,7 @@ require_once 'include/header.php';
 		    	timer = setInterval(function() {
 		    		route_short_name = $('#dropdown').find(":selected").text();
 		    		if(timerExists) {
-                        updateMap(route_short_name, true);
+                        updateMap(route_short_name, true, checkBuses);
                         console.log("  * Auto update * ");
                     }
 		    	}, time); //5000ms = 5s just for now
@@ -57,11 +70,29 @@ require_once 'include/header.php';
             }
         }
 
+        function checkBuses() {
+    	    // Checks the number of available buses and displays an informative message at the bottom of the page
+            if(num > 0){
+                var string = " buses "
+                if(num == 1){
+                    string = " bus "
+                }
+                $('#messages').removeClass("bad")
+                $('#messages').addClass("good")
+                $('#messages').html("There are " + num + string + "on this route. :^)")
+            } else {
+                $('#messages').removeClass("good")
+                $('#messages').addClass("bad")
+                $('#messages').html("There are 0 buses on this route. :^(")
+            }
+        }
+
     	$('#dropdown').change(function() {
     	    // Calls an Update on the map to the newly selected bus route
             // If timer on refreshes the timer
     		route_short_name = $('#dropdown').find(":selected").text();
-    		updateMap(route_short_name, false); // This function is in 'map.js'
+    		updateMap(route_short_name, false, checkBuses); // This function is in 'map.js'
+
     		console.log("Dropdown update");
     		refreshTimer();
 
@@ -71,7 +102,8 @@ require_once 'include/header.php';
     	    // On click Manually call an update to the map
             // If timer on refreshes the timer
     		route_short_name = $('#dropdown').find(":selected").text();
-    		updateMap(route_short_name, false);
+    		updateMap(route_short_name, false, checkBuses);
+
     		console.log("Click update");
             refreshTimer();
     	});
@@ -92,16 +124,11 @@ require_once 'include/header.php';
 
         //Sets the timer to not refresh at the start
         stopAutoRefresh(timer);
+        $('#button').click();
 
 
     });
 </script>
-<br><button id="recenter">Center</button>
-<br><button id="button">Update</button><br>
-<button id="stopRefresh" class="btn-success">Start</button><br>
-<div id="testdiv">
-
-</div>
 <?php
 require_once 'include/footer.php';
 ?>

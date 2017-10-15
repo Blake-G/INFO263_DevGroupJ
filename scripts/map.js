@@ -79,8 +79,9 @@ function adjustMapBounds() {
 }
 
 
-function updateMap(route_code, isAuto) {
+function updateMap(route_code, isAuto, cb) {
 	// this used to be "new_request.php", changed to my one for debugging
+    $('#loadAnim').toggleClass('hidden');
 	$.get("new_request.php", "route="+route_code, function(response, status, xhr) {
 		
 		if (status == "error") {
@@ -95,6 +96,7 @@ function updateMap(route_code, isAuto) {
 				console.log(response);
 				resetMap();
 				// want to stop autorefresh here too
+				num = 0;
 			} 
 
 			else if (response == null) {
@@ -128,12 +130,18 @@ function updateMap(route_code, isAuto) {
 				if (!isAuto) {
 					adjustMapBounds();
 				}
+
+
 			}
+            cb();
+            $('#loadAnim').toggleClass('hidden');
 		}
 		else {
 			// This shouldn't be possible to get here.
 		}
 	});
+
+
 }
 
 
