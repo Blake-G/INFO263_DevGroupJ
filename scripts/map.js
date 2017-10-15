@@ -31,7 +31,7 @@ class Map {
      * Returns a pretty-formatted HTML string with summary information
      * about a given vehicle on a given route
      */
-    infoForVehicle({vehicle, trip, position}) {
+    vehicleSummaryText({vehicle, trip, position}) {
         return `
             <div id="content">
                 <div id="bodyContent">
@@ -112,6 +112,8 @@ class Map {
 
         $.get(this.UPDATE_ENDPOINT, {route}, response => {
 
+            console.log(response);
+
             this.visibleBusesCount = response.length;
 
             // Regardless of the response, we need to delete the old markers
@@ -134,7 +136,7 @@ class Map {
                         lng: vehicle.position.longitude
                     },
                     title: `Vehicle ID: ${vehicle.vehicle.id}`,
-                    content: this.infoForVehicle(vehicle)
+                    content: this.vehicleSummaryText(vehicle)
                 });
             }
 
@@ -143,15 +145,13 @@ class Map {
             this.adjustBounds();
 
 
-        }).always(
-            () => {
-                // If there is one, call the callback
-                callback && callback();
+        }).always(() => {
+            // If there is one, call the callback
+            callback && callback();
 
-                // Hide the loading animation
-                this.loadingIndicator.toggleClass('hidden')
-            }
-        );
+            // Hide the loading animation
+            this.loadingIndicator.toggleClass('hidden')
+        });
 
     }
 
