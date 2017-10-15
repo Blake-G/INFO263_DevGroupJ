@@ -1,6 +1,6 @@
 var map;
 var markers = [];
-
+var num = 0;
 
 function initMap() {
 	var auck = {lat: -36.8485, lng: 174.7633};
@@ -69,6 +69,9 @@ function adjustMapBounds() {
 		bounds.extend(markers[i].getPosition());
 	}
 	map.fitBounds(bounds);
+	if(num == 1 || map.getZoom() > 17) {
+		map.setZoom(17);
+	}
 }
 
 
@@ -100,8 +103,8 @@ function updateMap(route_code, isAuto) {
 				deleteMarkers();
 
 				// Console output for debugging / manually checking positions.
-				console.log(response);
-
+				num = response.length;
+				console.log("Response from ACK API:", response)
 				var resLen = response['length'];
 				var pos, myLat, myLng, vehicleId, title, contentString;
 

@@ -22,51 +22,79 @@ require_once 'include/header.php';
     	// Timer is only started after a selection is made and won't have more than one
     	function startAutoRefresh(time) {
     		if (!timerExists) {
-    			console.log("Created timer");
 		    	timer = setInterval(function() {
 		    		route_short_name = $('#dropdown').find(":selected").text();
-		    		updateMap(route_short_name, true);
-		    		console.log("Auto update");
+		    		if(timerExists) {
+                        updateMap(route_short_name, true);
+                        console.log("  * Auto update * ");
+                    }
 		    	}, time); //5000ms = 5s just for now
 		    	timerExists = true;
+                $("#stopRefresh").html("Auto refresh on.");
+                $("#stopRefresh").addClass("btn-success");
+                $("#stopRefresh").removeClass("btn-danger");
+                console.log("Started the auto refresh");
 		    }
 	    }
+        function stopAutoRefresh(time) {
+    	    // Stops the timer
+            // Changes #stop refresh button properties
+            timerExists = false;
+            $("#stopRefresh").html("Auto refresh off.");
+            $("#stopRefresh").addClass("btn-danger");
+            $("#stopRefresh").removeClass("btn-success");
+            console.log("Stopped the auto refresh");
+            clearTimeout(time);
+        }
 
-	    function stopAutoRefresh(myTimer) { // Doesn't stop the auto refresh at the moment... don't know why
-	    	clearInterval(myTimer);
-	    	//timerExists = false;
-	    }
+        function refreshTimer() {
+    	    // Refreshes the timer if there is a timer set
+            if(timerExists) {
+                console.log("--- Refresh timer ---")
+                stopAutoRefresh(timer);
+                startAutoRefresh(updateTime);
+                console.log("--- ------------- ---")
+            }
+        }
 
     	$('#dropdown').change(function() {
+    	    // Calls an Update on the map to the newly selected bus route
+            // If timer on refreshes the timer
     		route_short_name = $('#dropdown').find(":selected").text();
     		updateMap(route_short_name, false); // This function is in 'map.js'
     		console.log("Dropdown update");
-
-    		stopAutoRefresh(timer);
-    		startAutoRefresh(updateTime);
+    		refreshTimer();
 
     	});
 
     	$('#button').click(function() {
+    	    // On click Manually call an update to the map
+            // If timer on refreshes the timer
     		route_short_name = $('#dropdown').find(":selected").text();
     		updateMap(route_short_name, false);
     		console.log("Click update");
-
-    		stopAutoRefresh(timer);
-    		startAutoRefresh(updateTime);
+            refreshTimer();
     	});
 
+
         $('#stopRefresh').click(function() {
-            clearInterval(timer);
-            timerExists = false;
-            console.log("Stopped the auto refresh");
+            // On refresh button click change state from On to off and off to on.
+            if(timerExists) {
+                stopAutoRefresh(timer);
+            } else {
+                startAutoRefresh(updateTime);
+            }
         });
+
+        //Sets the timer to not refresh at the start
+        stopAutoRefresh(timer);
+
 
     });
 </script>
 
-<br><button id="button">Click Me</button><br>
-<button id="stopRefresh">Stop Auto Refresh</button><br>
+<br><button id="button">Update</button><br>
+<button id="stopRefresh" class="btn-success">Start</button><br>
 <div id="testdiv">
 
 </div>

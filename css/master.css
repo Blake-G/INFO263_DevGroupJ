@@ -5,6 +5,7 @@
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color: #f0ffff;
 }
 
 .footer {
@@ -20,7 +21,9 @@ body {
 
 body > .container {
   padding: 60px 15px 0;
+  align-items: center;
 }
+
 
 .footer > .container {
   padding-right: 15px;
