@@ -26,10 +26,7 @@
     <p id="messages"></p>
 </div>
 
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6A5-qVznwBsQg3xMZu2hpAhTsVd7f2GI&callback=hasLoaded.maps.resolve">
-</script>
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_MAPS_KEY ?>&callback=hasLoaded.maps.resolve"></script>
 <script src="scripts/main.js"></script>
 <script src="scripts/app.js"></script>
 <script src="scripts/map.js"></script>
