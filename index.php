@@ -1,15 +1,16 @@
 <?php
-$active = "home";
-require_once 'include/header.php';
+    require_once 'include/header.php';
 ?>
 
 <div id="map"></div>
 
 <div id="controls">
-    <h3 for="dropdown">Bus Route: </h3>
+    <h3>Bus Route:</h3>
+
     <button id="stopRefresh" class="button">Start</button>
     <button id="button" class="button btn-info">Update</button>
-    <button id="recenter" class="button btn-info">Center</button>
+    <button id="recenter" class="button btn-info">Centre Map</button>
+
     <select id="dropdown">
         <?php
             require_once 'all_routes.php';
@@ -21,7 +22,7 @@ require_once 'include/header.php';
 </div>
 
 <div id="msg">
-    <h4>Messages: </h4>
+    <h4>Messages:</h4>
     <p id="messages"></p>
 </div>
 
@@ -34,5 +35,5 @@ require_once 'include/header.php';
 <script src="scripts/map.js"></script>
 
 <?php
-require_once 'include/footer.php';
+    require_once 'include/footer.php';
 ?>

@@ -1,7 +1,6 @@
 <?php
 
 require_once 'include/config.php';
-require_once 'requests.php';
 
 $url = "https://api.at.govt.nz/v2/public/realtime/vehiclelocations";
 $route = $_GET['route'];

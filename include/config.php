@@ -1,5 +1,7 @@
 <?php
 
+require_once 'apicall.php';
+
 define('DB_HOSTNAME', 'csse-info263.canterbury.ac.nz');
 define('DB_DATABASE', 'akl_transport');
 define('DB_USERNAME', 'info263');

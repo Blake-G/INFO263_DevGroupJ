@@ -33,18 +33,14 @@ class Map {
      */
     vehicleSummaryText({vehicle, trip, position}) {
         return `
-            <div id="content">
-                <div id="bodyContent">
-                    <h4>Vehicle Information</h4>
-                    <ul>
-                        <li>Vehicle ID: ${vehicle.id}</li>
-                        <li>Start Time: ${trip.start_time}</li>
-                        <li>Location: (${position.latitude}, ${position.longitude})</li>
-                        <li>Route ID: ${trip.route_id}</li>
-                        <li>Trip ID: ${trip.trip_id}</li>
-                    </ul>
-                </div>
-            </div>
+            <h4>Vehicle Information</h4>
+            <ul>
+                <li>Vehicle ID: ${vehicle.id}</li>
+                <li>Start Time: ${trip.start_time}</li>
+                <li>Location: (${position.latitude}, ${position.longitude})</li>
+                <li>Route ID: ${trip.route_id}</li>
+                <li>Trip ID: ${trip.trip_id}</li>
+            </ul>
         `;
     }
 
