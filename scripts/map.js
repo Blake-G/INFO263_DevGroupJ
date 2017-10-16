@@ -64,6 +64,7 @@ class Map {
         );
 
         this.markers.length && this.map.fitBounds(bounds);
+        ! this.markers.length && this.reset();
         this.map.getZoom() > this.MAX_ZOOM && this.map.setZoom(this.MAX_ZOOM);
 
     }
