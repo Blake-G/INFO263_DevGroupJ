@@ -2,7 +2,7 @@
 
 require_once 'include/config.php';
 
-$url = "https://api.at.govt.nz/v2/public/realtime/vehiclelocations";
+$url = AT_API_BASE . "/public/realtime/vehiclelocations";
 $route = $_GET['route'];
 
 #sanitize $route before query
