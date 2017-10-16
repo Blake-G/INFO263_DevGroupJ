@@ -33,7 +33,7 @@ class Map {
      */
     vehicleSummaryText({vehicle, trip, position}) {
         return `
-            <h4>Vehicle Information</h4>
+            <h4>Bus Information</h4>
             <ul>
                 <li>Vehicle ID: ${vehicle.id}</li>
                 <li>Start Time: ${trip.start_time}</li>
@@ -94,7 +94,6 @@ class Map {
      * Removes all info windows from view and destroys any references to them
      */
     removeInfoWindows() {
-
         for (let window of this.windows) {
             window.close();
         }
