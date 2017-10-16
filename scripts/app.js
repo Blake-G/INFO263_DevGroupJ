@@ -10,10 +10,11 @@ class App {
      */
     updateInfoText() {
 
+        const prefix = this.map.visibleBusesCount == 1 ? 'is' : 'are';
         const suffix = this.map.visibleBusesCount == 1 ? 'bus' : 'buses';
 
         this.infoMessages.attr('class', this.map.visibleBusesCount ? 'good' : 'bad');
-        this.infoMessages.text(`There are ${this.map.visibleBusesCount} ${suffix} on this route`);
+        this.infoMessages.text(`There ${prefix} ${this.map.visibleBusesCount} ${suffix} on this route`);
 
     }
 
