@@ -2,7 +2,7 @@
 
         <footer class="footer">
           <div class="container">
-              <div id="loadAnim" class="spinner hidden">
+              <div id="loading-animation" class="spinner hidden">
                   <div class="bounce1"></div>
                   <div class="bounce2"></div>
                   <div class="bounce3"></div>

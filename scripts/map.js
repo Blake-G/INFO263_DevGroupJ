@@ -164,7 +164,7 @@ class Map {
 
         this.markers = [];
         this.visibleBusesCount = 0;
-        this.loadingIndicator = $('#loadAnim');
+        this.loadingIndicator = $('#loading-animation');
 
         this.mapElement = $(selector)[0];
         this.map = new google.maps.Map(this.mapElement, this.defaults);
