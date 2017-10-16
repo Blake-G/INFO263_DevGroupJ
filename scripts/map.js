@@ -80,16 +80,32 @@ class Map {
             map: this.map
         });
 
-        marker.addListener('click', () => infoWindow.open(this.map, marker));
+        marker.addListener('click', () => {
+            infoWindow.open(this.map, marker);
+            this.windows.push(infoWindow);
+        });
 
         this.markers.push(marker);
 
     }
 
     /**
-     * Syntactic sugar for removing all markers from the map
+     * Removes all info windows from view and destroys any references to them
+     */
+    removeInfoWindows() {
+
+        for (let window of this.windows) {
+            window.close();
+        }
+
+        this.windows = [];
+    }
+
+    /**
+     * Syntactic sugar for removing all markers and windows from the map
      */
     deleteMarkers() {
+        this.removeInfoWindows();
         this.markersVisible = false;
         this.markers = [];
     }
@@ -163,11 +179,17 @@ class Map {
         // Instance variables
 
         this.markers = [];
+        this.windows = [];
+
         this.visibleBusesCount = 0;
         this.loadingIndicator = $('#loading-animation');
 
         this.mapElement = $(selector)[0];
         this.map = new google.maps.Map(this.mapElement, this.defaults);
+
+        // Bind events to methods
+
+        google.maps.event.addListener(this.map, 'click', () => this.removeInfoWindows());
 
     }
 
