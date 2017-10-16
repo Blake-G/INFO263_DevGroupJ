@@ -157,7 +157,7 @@ class Map {
 
         // Class constants
 
-        this.MAX_ZOOM = 17;
+        this.MAX_ZOOM = 15;
         this.UPDATE_ENDPOINT = 'route_info.php';
 
         // Instance variables
