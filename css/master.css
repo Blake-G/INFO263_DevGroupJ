@@ -37,12 +37,12 @@ body > .container {
 }
 
 #control {
-  float : left;
+  float: left;
 
 }
 
 h3, h4, p {
-  display : inline;
+  display: inline;
 }
 
 .button {
@@ -51,8 +51,8 @@ h3, h4, p {
   margin-right: 0px;
 }
 
-#msg {
-  float : left;
+#message-container {
+  float: left;
 }
 
 .good {

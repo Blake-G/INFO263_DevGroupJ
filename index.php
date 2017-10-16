@@ -3,7 +3,6 @@
 ?>
 
 <div id="map"></div>
-
 <div id="controls">
     <h3>Bus Route:</h3>
 
@@ -20,8 +19,7 @@
         ?>
     </select>
 </div>
-
-<div id="msg">
+<div id="message-container">
     <h4>Messages:</h4>
     <p id="messages"></p>
 </div>
